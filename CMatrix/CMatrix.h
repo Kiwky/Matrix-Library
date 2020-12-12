@@ -1,4 +1,5 @@
 #include <iostream>
+#include <cmath>
 #include <vector>
 #include <climits>
 
@@ -30,6 +31,9 @@ public:
 	/* Afisare matrice. */
 	void Print();
 
+	/* Calculare determinat matrice. (Chio) */
+	T Determinant();
+
 	/* Suprascriere operator '+'. Returneaza suma a doua matrice. */
 	CMatrix operator+(const CMatrix &matrix);
 
@@ -43,7 +47,7 @@ public:
 	CMatrix operator-(T _value);
 
 	// INCOMPLET
-	/* Suprascriere operator '*'. Returneaza produsul a doua matrice. (Chio) */
+	/* Suprascriere operator '*'. Returneaza produsul a doua matrice. */
 	CMatrix operator*(const CMatrix &matrix);
 };
 
@@ -117,6 +121,50 @@ void CMatrix<T>::Print() {
 		}
 		cout << endl;
 	}
+}
+
+template<typename T>
+T CMatrix<T>::Determinant() {
+	// Verificare matrice 1x1.
+	// ???????????????????????
+
+	// Matricea nu exista, nu este patratica sau nu are elemente.
+	if(Cols() <= 0 || Lines() <= 0 || Lines() != Cols()) { return 0; }
+
+	// Matrice 2 x 2.
+	if(Lines() == 2 && Cols() == 2) {
+		return data[0][0] * data[1][1] - data[0][1] * data[1][0];
+	}
+
+	// Calculare determinant (Chio).
+	CMatrix tempMatrix, auxMatrix;
+	int beforeMatrix = 1, size = Lines();
+
+	tempMatrix.data = this->data;
+
+	while(size > 2) {
+		beforeMatrix *= pow(tempMatrix.data[0][0], size - 2);
+
+		auxMatrix.data.clear();
+		for(int i = 1; i < size; i++) {
+			vector<T> lineData;
+			lineData.reserve(Cols());
+
+			for(int j = 1; j < size; j++) {
+				int res = (tempMatrix.data[0][0] * tempMatrix.data[i][j] - tempMatrix.data[0][j] * tempMatrix.data[i][0]);
+				lineData.emplace_back(res);
+			}
+
+			auxMatrix.data.emplace_back(lineData);
+		}
+
+		tempMatrix.data.clear();
+		tempMatrix = auxMatrix;
+
+		size--;
+	}
+
+	return ((tempMatrix.data[0][0] * tempMatrix.data[1][1] - tempMatrix.data[0][1] * tempMatrix.data[1][0]) / beforeMatrix);
 }
 
 template<typename T>
