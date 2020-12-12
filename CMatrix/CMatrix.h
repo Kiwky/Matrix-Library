@@ -33,8 +33,18 @@ public:
 	/* Suprascriere operator '+'. Returneaza suma a doua matrice. */
 	CMatrix operator+(const CMatrix &matrix);
 
+	/* Suprascriere operator '+'. Returneaza matricea unde fiecare elemente este incrementat cu '_value'. */
+	CMatrix operator+(T _value);
+
 	/* Suprascriere operator '-'. Returneaza diferenta a doua matrice. */
 	CMatrix operator-(const CMatrix &matrix);
+
+	/* Suprascriere operator '-'. Returneaza matricea unde fiecare elemente este decrementat cu '_value'. */
+	CMatrix operator-(T _value);
+
+	// INCOMPLET
+	/* Suprascriere operator '*'. Returneaza produsul a doua matrice. (Chio) */
+	CMatrix operator*(const CMatrix &matrix);
 };
 
 template<typename T>
@@ -127,6 +137,19 @@ CMatrix<T> CMatrix<T>::operator+(const CMatrix &matrix) {
 }
 
 template<typename T>
+CMatrix<T> CMatrix<T>::operator+(T _value) {
+	CMatrix result(Lines(), Cols(), 0);
+
+	for(uint i = 0; i < Lines(); i++) {
+		for(uint j = 0; j < Cols(); j++) {
+			result.data[i][j] = data[i][j] + _value;
+		}
+	}
+
+	return result;
+}
+
+template<typename T>
 CMatrix<T> CMatrix<T>::operator-(const CMatrix &matrix) {
 	if(matrix.Lines() != Lines() || matrix.Cols() != Cols()) {
 		return CMatrix();
@@ -141,4 +164,22 @@ CMatrix<T> CMatrix<T>::operator-(const CMatrix &matrix) {
 	}
 
 	return result;
+}
+
+template<typename T>
+CMatrix<T> CMatrix<T>::operator-(T _value) {
+	CMatrix result(Lines(), Cols(), 0);
+
+	for(uint i = 0; i < Lines(); i++) {
+		for(uint j = 0; j < Cols(); j++) {
+			result.data[i][j] = data[i][j] - _value;
+		}
+	}
+
+	return result;
+}
+
+template<typename T>
+CMatrix<T> CMatrix<T>::operator*(const CMatrix &matrix) {
+	return CMatrix();
 }
