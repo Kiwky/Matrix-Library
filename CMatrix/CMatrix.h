@@ -6,6 +6,12 @@
 using namespace std;
 using uint = unsigned int;
 
+enum Simetria: int {
+	None		/**/ = 0,
+	Simetric	/**/ = 1 << 0,
+	Antisimetric/**/ = 1 << 1
+};
+
 template <typename T>
 class CMatrix {
 
@@ -33,6 +39,9 @@ public:
 
 	/* Afisare matrice in spirala. */
 	void Spiral();
+
+	/* Calculare si returnare niciuna (0) / simetric (1) / antisimetric (2) / amandoua (3) */
+	int GetSimetria();
 
 	/* Calculare determinat matrice. (Chio) */
 	T Determinant();
@@ -160,6 +169,25 @@ void CMatrix<T>::Spiral() {
 }
 
 template<typename T>
+int CMatrix<T>::GetSimetria() {
+	if(Lines() <= 0 || Cols() <= 0 || Lines() != Cols()) return 0;
+
+	int result = Simetria::Simetric | Simetria::Antisimetric;
+
+	for(int i = 0; i < Lines(); i++) {
+		for(int j = 0; j < Cols(); j++) {
+			// Daca nu este simetrica se elimina bitul respectiv.
+			if(data[i][j] != data[j][i]) result &= ~Simetria::Simetric;
+
+			// Daca nu este antisimetrica se elimina bitul respectiv.
+			if(data[i][j] != -data[j][i]) result &= ~Simetria::Antisimetric;
+		}
+	}
+
+	return result;
+}
+
+template<typename T>
 T CMatrix<T>::Determinant() {
 	// Matricea nu exista, nu este patratica sau nu are elemente.
 	if(Cols() <= 0 || Lines() <= 0 || Lines() != Cols()) { return 0; }
@@ -262,5 +290,20 @@ CMatrix<T> CMatrix<T>::operator-(T _value) {
 
 template<typename T>
 CMatrix<T> CMatrix<T>::operator*(const CMatrix &matrix) {
-	return CMatrix();
+	CMatrix result(Lines(), Cols(), 0);
+
+	// Verificare conditie
+	if(Lines() <= 0 || Cols() <= 0 /*|| matricile nu se pot inmulti*/) {
+		return CMatrix();
+	}
+
+	for(int i = 0; i < Lines(); i++) {
+		for(int j = 0; j < matrix.Cols(); j++) {
+			for(int k = 0; k < Cols(); k++) {
+				result.data[i][j] += data[i][k] * matrix.data[k][j];
+			}
+		}
+	}
+
+	return result;
 }

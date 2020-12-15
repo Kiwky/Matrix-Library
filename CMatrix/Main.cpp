@@ -4,8 +4,11 @@
 using namespace std;
 
 int main() {
-	CMatrix<int> m(3, 3, 4);
+	CMatrix<int> m;
+	m.Read(2,2);
 
-	m.Spiral();
+	(m * m).Print();
+
+
 }
 
