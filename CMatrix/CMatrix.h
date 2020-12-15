@@ -58,9 +58,11 @@ public:
 	/* Suprascriere operator '-'. Returneaza matricea unde fiecare elemente este decrementat cu '_value'. */
 	CMatrix operator-(T _value);
 
-	// INCOMPLET
 	/* Suprascriere operator '*'. Returneaza produsul a doua matrice. */
 	CMatrix operator*(const CMatrix &matrix);
+
+	/* Suprascriere operator '*'. Returneaza matrice inmultita cu un scalar. */
+	CMatrix operator*(T _value);
 };
 
 template<typename T>
@@ -302,6 +304,24 @@ CMatrix<T> CMatrix<T>::operator*(const CMatrix &matrix) {
 			for(int k = 0; k < Cols(); k++) {
 				result.data[i][j] += data[i][k] * matrix.data[k][j];
 			}
+		}
+	}
+
+	return result;
+}
+
+template<typename T>
+CMatrix<T> CMatrix<T>::operator*(T _value) {
+	CMatrix result(Lines(), Cols(), 0);
+
+	// Verificare conditie
+	if(Lines() <= 0 || Cols() <= 0) {
+		return CMatrix();
+	}
+
+	for(int i = 0; i < Lines(); i++) {
+		for(int j = 0; j < Cols(); j++) {
+			result.data[i][j] = data[i][j] * _value;
 		}
 	}
 
