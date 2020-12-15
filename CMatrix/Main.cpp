@@ -4,7 +4,8 @@
 using namespace std;
 
 int main() {
-	CMatrix<int> n;
-	n.Read(3, 3);
-	cout << n.Determinant();
+	CMatrix<int> m(3, 3, 4);
+
+	m.Spiral();
 }
+

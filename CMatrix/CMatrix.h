@@ -31,6 +31,9 @@ public:
 	/* Afisare matrice. */
 	void Print();
 
+	/* Afisare matrice in spirala. */
+	void Spiral();
+
 	/* Calculare determinat matrice. (Chio) */
 	T Determinant();
 
@@ -104,7 +107,6 @@ int CMatrix<T>::Read(uint _lines, uint _cols) {
 		// Adauga linia citita in matrice.
 		data.emplace_back(lineData);
 	}
-
 	return 1;
 }
 
@@ -124,10 +126,41 @@ void CMatrix<T>::Print() {
 }
 
 template<typename T>
-T CMatrix<T>::Determinant() {
-	// Verificare matrice 1x1.
-	// ???????????????????????
+void CMatrix<T>::Spiral() {
+	if(Lines() <= 0 || Cols() <= 0) {
+		return;
+	}
 
+	int k = 0;
+	int rowSize = Lines() - 1;
+	int colSize = Cols() - 1;
+
+	while(rowSize + 1 > k) {
+		for(int i = k; i < colSize; i++) {
+			cout << data[k][i] << " ";
+		}
+		for(int i = k; i < rowSize; i++) {
+			cout << data[i][colSize] << " ";
+		}
+		for(int i = colSize; i > k; i--) {
+			cout << data[rowSize][i] << " ";
+		}
+		for(int i = rowSize; i > k; i--) {
+			cout << data[i][k] << " ";
+		}
+
+		colSize--;
+		rowSize--;
+		k++;
+	}
+
+	if(colSize == rowSize && Lines() % 2 == 1) {
+		cout << data[k - 1][k - 1] << " ";
+	}
+}
+
+template<typename T>
+T CMatrix<T>::Determinant() {
 	// Matricea nu exista, nu este patratica sau nu are elemente.
 	if(Cols() <= 0 || Lines() <= 0 || Lines() != Cols()) { return 0; }
 
